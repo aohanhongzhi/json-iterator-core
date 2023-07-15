@@ -15,6 +15,7 @@ var fieldDecoders = map[string]ValDecoder{}
 var typeEncoders = map[string]ValEncoder{}
 var fieldEncoders = map[string]ValEncoder{}
 var extensions = []Extension{}
+var CamelCase bool = false
 
 // StructDescriptor describe how should we encode/decode the struct
 type StructDescriptor struct {
@@ -470,7 +471,12 @@ func calcFieldNames(originalFieldName string, tagProvidedFieldName string, whole
 	// rename?
 	var fieldNames []string
 	if tagProvidedFieldName == "" {
-		fieldNames = []string{originalFieldName}
+		// 这里可以给Field处理默认的key
+		if CamelCase {
+			fieldNames = []string{Lcfirst(originalFieldName)}
+		} else {
+			fieldNames = []string{originalFieldName}
+		}
 	} else {
 		fieldNames = []string{tagProvidedFieldName}
 	}
@@ -480,4 +486,12 @@ func calcFieldNames(originalFieldName string, tagProvidedFieldName string, whole
 		fieldNames = []string{}
 	}
 	return fieldNames
+}
+
+// Lcfirst 首字母小写
+func Lcfirst(str string) string {
+	for i, v := range str {
+		return string(unicode.ToLower(v)) + str[i+1:]
+	}
+	return str
 }

@@ -7,6 +7,7 @@ import (
 )
 
 func ExampleMarshal() {
+	CamelCase = true
 	type ColorGroup struct {
 		ID     int
 		Name   string
